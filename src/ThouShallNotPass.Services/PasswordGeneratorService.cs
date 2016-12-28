@@ -18,7 +18,7 @@ namespace ThouShallNotPass.Services
 
         public string Generate()
         {
-            throw new NotImplementedException();
+            return "awdawdawdawdaw0!";
         }
     }
 }
