@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ThouShallNotPass.Services.Test
@@ -6,130 +7,50 @@ namespace ThouShallNotPass.Services.Test
     public class PasswordGeneratorServiceTests
     {
         private readonly IPasswordGeneratorService _sut;
+        private int _length;
 
         public PasswordGeneratorServiceTests()
         {
             _sut = new PasswordGeneratorService();
+            _length = 12;
         }
 
         [Fact]
-        public void PasswordGeneratorService_Generate_ShouldBe12CharsLong()
+        public void PasswordGeneratorService_Generate_ShouldEqualToLength()
         {
-            var generatedPassword = _sut.Generate();
+            var generatedPassword = _sut.Generate(_length);
 
-            Assert.Equal(12, generatedPassword.Count());
+            Assert.Equal(_length, generatedPassword.Count());
         }
 
         [Fact]
-        public void PasswordGeneratorService_Generate_ShouldContainAtleastOneNumber()
+        public void PasswordGeneratorService_Generate_ShouldGenerateRandomChars()
         {
-            var generatedPassword = _sut.Generate();
+            var generatedPassword = _sut.Generate(_length);
 
-            bool result = false;
+            var validChars = new List<char>();
+            for (int x = 33; x <= 122; x++) // valid ascii numbers 33-122
+            {
+                validChars.Add((char)x);
+            }
+
+            var result = false;
 
             foreach(var character in generatedPassword.ToArray())
             {
-                for(int x = 48; x <= 57; x++) // valid ascii numbers 48 - 57
-                {
-                    if (character == (char)x)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-                if (result == true)
-                    break;
+                result = validChars.Contains(character) ? true : false;                
             }
 
             Assert.True(result);
         }
-
-        [Fact]
-        public void PasswordGeneratorService_Generate_ShouldContainAtleastOneSpecialChar()
-        {
-            var generatedPassword = _sut.Generate();
-
-            bool result = false;
-
-            foreach (var character in generatedPassword.ToArray())
-            {
-                for (int x = 33; x <= 47; x++) // valid ascii special case chars 33 - 47
-                {
-                    if (character == (char)x)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-                for (int x = 58; x <= 64; x++) // valid ascii special case chars 58 - 64
-                {
-                    if (character == (char)x)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-                if (result == true)
-                    break;
-            }
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void PasswordGeneratorService_Generate_ShouldContainAtleastOneUpercaseChar()
-        {
-            var generatedPassword = _sut.Generate();
-
-            bool result = false;
-
-            foreach (var character in generatedPassword.ToArray())
-            {
-                for (int x = 65; x <= 90; x++) // valid ascii uppercase chars 65 - 90
-                {
-                    if (character == (char)x)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-                if (result == true)
-                    break;
-            }
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void PasswordGeneratorService_Generate_ShouldContainAtleastOneLowecaseChar()
-        {
-            var generatedPassword = _sut.Generate();
-
-            bool result = false;
-
-            foreach (var character in generatedPassword.ToArray())
-            {
-                for (int x = 65; x <= 90; x++) // valid ascii lowercase chars 97 - 122
-                {
-                    if (character == (char)x)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-                if (result == true)
-                    break;
-            }
-
-            Assert.True(result);
-        }
+        
 
         [Fact]
         public void PasswordGeneratorService_Generate_ShouldProblablyNotGenerateSamePasswordAgain()
         {
-            var generatedPassword = _sut.Generate();
+            var generatedPassword = _sut.Generate(_length);
 
-            var generatedPassword2 = _sut.Generate();
+            var generatedPassword2 = _sut.Generate(_length);
 
             Assert.NotEqual(generatedPassword, generatedPassword2);
         }

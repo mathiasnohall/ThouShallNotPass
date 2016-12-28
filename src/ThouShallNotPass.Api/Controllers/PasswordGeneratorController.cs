@@ -16,9 +16,9 @@ namespace ThouShallNotPass.Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public IActionResult Generate()
+        public IActionResult Generate([FromQuery]int lenght = 12)
         {
-            return Ok(_passwordGeneratorService.Generate());
+            return Ok(_passwordGeneratorService.Generate(lenght));
         }
         
     }
