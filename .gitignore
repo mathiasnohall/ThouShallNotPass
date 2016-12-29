@@ -250,3 +250,8 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+
+#solution specific
+elasticsearch-5.1.1/data/
+elasticsearch-5.1.1/logs/

@@ -25,6 +25,8 @@ namespace ThouShallNotPass.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IPasswordGeneratorService, PasswordGeneratorService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICryptoService, CryptoService>();
 
             // Add framework services.
             services.AddMvc();
